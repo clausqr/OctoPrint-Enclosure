@@ -1,5 +1,6 @@
 import sys
 import time
+import board
 import adafruit_dht
 
 
@@ -10,13 +11,18 @@ sensor_args =   {
                     '2302': adafruit_dht.DHT22
                 }
 
+pin_args = {
+        'D18': board.D18,
+        'D22': board.D22,
+        }
+
 if len(sys.argv) == 3 and sys.argv[1] in sensor_args:
     sensor = sensor_args[sys.argv[1]]
-    pin = sys.argv[2]
+    pin = pin_args[sys.argv[2]]
 else:
     sys.exit(1)
 
-dht_dev = sensor(pin)
+dht_dev = sensor(pin, use_pulseio=False)
 
 # DHT sensor read fails quite often, causing enclosure plugin to report value of 0.
 # If this happens, retry as suggested in the adafruit_dht docs.
